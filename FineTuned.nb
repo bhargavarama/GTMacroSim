@@ -1,0 +1,1213 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     47860,       1204]
+NotebookOptionsPosition[     47459,       1186]
+NotebookOutlinePosition[     47800,       1201]
+CellTagsIndexPosition[     47757,       1198]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"--", 
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"-", "constants"}]}]}]}]}], " ", "used", " ", "in", " ", 
+    "the", " ", "set", " ", "of", " ", "compiled", " ", "functions", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{"below", "--"}], "--"}], "--"}], "--"}], "--"}]}], " ", 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Kj", "=", "150."}], ";", 
+    RowBox[{"w", "=", "20."}], ";", 
+    RowBox[{"Vf", "=", "100."}], ";", 
+    RowBox[{"cap", "=", "2500."}], ";", 
+    RowBox[{"L", "=", "3."}], ";", 
+    RowBox[{"dx", "=", 
+     RowBox[{"1.", "/", "9"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{"--", 
+      RowBox[{"--", 
+       RowBox[{"--", 
+        RowBox[{"--", 
+         RowBox[{"-", "Set"}]}]}]}]}], " ", "of", " ", "compiled", " ", 
+     "functions", " ", "used", " ", "in", " ", "the", " ", "main", " ", 
+     "function", " ", "\"\<f\>\"", " ", 
+     RowBox[{
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"below", "--"}], "--"}], "--"}], "--"}], "--"}]}], " ", 
+    "*)"}], "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"-", 
+        RowBox[{"demF", ":", " ", 
+         RowBox[{
+         "Calculates", " ", "demand", " ", "on", " ", "freeway"}]}]}]}], ";", 
+      " ", 
+      RowBox[{"Input", ":", 
+       RowBox[{
+        RowBox[{
+        "p1", " ", "and", " ", "p2", " ", "are", " ", "vectors", " ", "of", 
+         " ", "size", " ", "n"}], "-", "1"}]}]}], ",", " ", 
+     RowBox[{"ouput", ":", " ", 
+      RowBox[{
+       RowBox[{"vector", " ", "of", " ", "size", " ", "n"}], "-", 
+       RowBox[{"1", "--"}], "-"}]}]}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"demF", "=", 
+     RowBox[{"Compile", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"p1", ",", "_Real", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p2", ",", "_Real", ",", "0"}], "}"}]}], "}"}], ",", 
+       RowBox[{"Max", "[", 
+        RowBox[{"0", ",", 
+         RowBox[{"Subtract", "[", 
+          RowBox[{
+           RowBox[{"Min", "[", 
+            RowBox[{
+             RowBox[{"p1", " ", "Vf"}], ",", 
+             RowBox[{"L", " ", "cap"}]}], "]"}], ",", "p2"}], "]"}]}], "]"}], 
+       ",", 
+       RowBox[{"Parallelization", "\[Rule]", "True"}], ",", 
+       RowBox[{"CompilationOptions", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<ExpressionOptimization\>\"", "\[Rule]", "True"}], ",", 
+          RowBox[{"\"\<InlineExternalDefinitions\>\"", "\[Rule]", "True"}]}], 
+         "}"}]}], ",", 
+       RowBox[{"RuntimeOptions", "\[Rule]", "\"\<Speed\>\""}]}], "]"}]}], 
+    ";"}], " ", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"-", 
+        RowBox[{"demR", ":", " ", 
+         RowBox[{"Calculates", " ", "demand", " ", "on", " ", "ramps"}]}]}]}],
+       ";", " ", 
+      RowBox[{"Input", ":", 
+       RowBox[{
+        RowBox[{
+        "p1", " ", "is", " ", "a", " ", "vector", " ", "of", " ", "size", " ",
+          "n"}], "-", 
+        RowBox[{"2", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"or", " ", "n"}], "-", 
+           RowBox[{"2", " ", "X", " ", "p"}], "-", "1"}], ")"}]}]}]}]}], ",", 
+     " ", 
+     RowBox[{"ouput", ":", " ", 
+      RowBox[{
+       RowBox[{"vector", " ", "of", " ", "size", " ", "n"}], "-", 
+       RowBox[{"2", " ", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"or", " ", "n"}], "-", 
+           RowBox[{"2", " ", "X", " ", "p"}], "-", "1"}], ")"}], "--"}]}], 
+       "-"}]}]}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"demR", "=", 
+     RowBox[{"Compile", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"p1", ",", "_Real", ",", "0"}], "}"}], "}"}], ",", 
+       RowBox[{"Min", "[", 
+        RowBox[{
+         RowBox[{"p1", " ", "Vf"}], ",", "cap"}], "]"}], ",", 
+       RowBox[{"Parallelization", "\[Rule]", "True"}], ",", 
+       RowBox[{"RuntimeAttributes", "\[Rule]", 
+        RowBox[{"{", "Listable", "}"}]}], ",", 
+       RowBox[{"CompilationOptions", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<ExpressionOptimization\>\"", "\[Rule]", "True"}], ",", 
+          RowBox[{"\"\<InlineExternalDefinitions\>\"", "\[Rule]", "True"}]}], 
+         "}"}]}], ",", 
+       RowBox[{"RuntimeOptions", "\[Rule]", "\"\<Speed\>\""}]}], "]"}]}], 
+    ";"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"-", 
+        RowBox[{"supF", ":", " ", 
+         RowBox[{
+         "Calculates", " ", "supply", " ", "on", " ", "freeway"}]}]}]}], ";", 
+      " ", 
+      RowBox[{"Input", ":", 
+       RowBox[{
+        RowBox[{
+        "p1", " ", "is", " ", "a", " ", "vector", " ", "of", " ", "size", " ",
+          "n"}], "-", "2"}]}]}], ",", " ", 
+     RowBox[{"ouput", ":", " ", 
+      RowBox[{
+       RowBox[{"vector", " ", "of", " ", "size", " ", "n"}], "-", 
+       RowBox[{"2", "--"}], "-"}]}]}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"supF", "=", 
+     RowBox[{"Compile", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"p1", ",", "_Real", ",", "1"}], "}"}], "}"}], ",", 
+       RowBox[{"Min", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Subtract", "[", 
+           RowBox[{
+            RowBox[{"L", " ", "Kj"}], ",", "p1"}], "]"}], " ", "w"}], ",", 
+         RowBox[{"L", " ", "cap"}]}], "]"}], ",", 
+       RowBox[{"Parallelization", "\[Rule]", "True"}], ",", 
+       RowBox[{"CompilationOptions", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<ExpressionOptimization\>\"", "\[Rule]", "True"}], ",", 
+          RowBox[{"\"\<InlineExternalDefinitions\>\"", "\[Rule]", "True"}]}], 
+         "}"}]}], ",", 
+       RowBox[{"RuntimeOptions", "\[Rule]", "\"\<Speed\>\""}]}], "]"}]}], 
+    ";"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"-", 
+        RowBox[{"NsupF", ":", " ", 
+         RowBox[{
+         "Calculates", " ", "Nsupply", " ", "on", " ", "freeway"}]}]}]}], ";",
+       " ", 
+      RowBox[{"Input", ":", "p1"}]}], ",", "p2", ",", "p3", ",", 
+     RowBox[{
+      RowBox[{
+      "and", " ", "p4", " ", "are", " ", "vectors", " ", "of", " ", "size", 
+       " ", "n"}], "-", "1"}], ",", " ", 
+     RowBox[{"ouput", ":", " ", 
+      RowBox[{
+       RowBox[{"vector", " ", "of", " ", "size", " ", "n"}], "-", 
+       RowBox[{"1", "--"}], "-"}]}]}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"NsupF", "=", 
+     RowBox[{"Compile", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"p1", ",", "_Real", ",", "1"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p2", ",", "_Real", ",", "1"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p3", ",", "_Real", ",", "1"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p4", ",", "_Real", ",", "1"}], "}"}]}], "}"}], ",", 
+       RowBox[{"Max", "[", 
+        RowBox[{"0", ",", 
+         RowBox[{
+          RowBox[{"Min", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{
+              RowBox[{"Subtract", "[", 
+               RowBox[{
+                RowBox[{"L", " ", "Kj"}], ",", "p1"}], "]"}], " ", "Vf"}], 
+             "-", 
+             RowBox[{"(", 
+              RowBox[{"p2", "+", "p3"}], ")"}]}], ",", 
+            RowBox[{"L", " ", "cap"}]}], "]"}], "-", "p4"}]}], "]"}], ",", 
+       RowBox[{"Parallelization", "\[Rule]", "True"}], ",", 
+       RowBox[{"CompilationOptions", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<ExpressionOptimization\>\"", "\[Rule]", "True"}], ",", 
+          RowBox[{"\"\<InlineExternalDefinitions\>\"", "\[Rule]", "True"}]}], 
+         "}"}]}], ",", 
+       RowBox[{"RuntimeOptions", "\[Rule]", "\"\<Speed\>\""}]}], "]"}]}], 
+    ";"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"-", 
+        RowBox[{"NsupR", ":", " ", 
+         RowBox[{
+         "Calculates", " ", "Nsupply", " ", "on", " ", "ramps"}]}]}]}], ";", 
+      " ", 
+      RowBox[{"Input", ":", 
+       RowBox[{
+        RowBox[{
+        "p1", " ", "and", " ", "p2", " ", "are", " ", "matrices", " ", "of", 
+         " ", "size", " ", "n"}], "-", 
+        RowBox[{"2", " ", "X", " ", "p"}], "-", "1"}]}]}], ",", " ", 
+     RowBox[{"ouput", ":", " ", 
+      RowBox[{
+       RowBox[{"matrix", " ", "of", " ", "size", " ", "n"}], "-", 
+       RowBox[{"2", " ", "X", " ", "p"}], "-", 
+       RowBox[{"1", "--"}], "-"}]}]}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"NsupR", "=", 
+     RowBox[{"Compile", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"p1", ",", "_Real", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p2", ",", "_Real", ",", "0"}], "}"}]}], "}"}], ",", 
+       RowBox[{"Min", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"Subtract", "[", 
+            RowBox[{"Kj", ",", "p1"}], "]"}], " ", "Vf"}], "-", "p2"}], ",", 
+         "cap"}], "]"}], ",", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{"Parallelization", "\[Rule]", "True"}], ",", 
+         RowBox[{"RuntimeAttributes", "\[Rule]", 
+          RowBox[{"{", "Listable", "}"}]}], ","}], "*)"}], 
+       RowBox[{"CompilationOptions", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<ExpressionOptimization\>\"", "\[Rule]", "True"}], ",", 
+          RowBox[{"\"\<InlineExternalDefinitions\>\"", "\[Rule]", "True"}]}], 
+         "}"}]}], ",", 
+       RowBox[{"RuntimeOptions", "\[Rule]", "\"\<Speed\>\""}]}], "]"}]}], 
+    ";"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"-", 
+        RowBox[{"floF", ":", " ", 
+         RowBox[{"Calculates", " ", "flow", " ", "on", " ", "freeway"}]}]}]}],
+       ";", " ", 
+      RowBox[{"Input", ":", "p1"}]}], ",", " ", "p2", ",", "p3", ",", " ", 
+     "p4", ",", " ", 
+     RowBox[{
+      RowBox[{
+      "and", " ", "p5", " ", "are", " ", "vectors", " ", "of", " ", "size", 
+       " ", "n"}], "-", "1"}], ",", " ", 
+     RowBox[{"ouput", ":", " ", 
+      RowBox[{
+       RowBox[{"vector", " ", "of", " ", "size", " ", "n"}], "-", 
+       RowBox[{"1", "--"}], "-"}]}]}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"floF", "=", 
+     RowBox[{"Compile", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"p1", ",", "_Real", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p2", ",", "_Real", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p3", ",", "_Real", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p4", ",", "_Real", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p5", ",", "_Real", ",", "0"}], "}"}]}], "}"}], ",", 
+       RowBox[{"Min", "[", 
+        RowBox[{
+         RowBox[{"demF", "[", 
+          RowBox[{"p1", ",", "p5"}], "]"}], ",", 
+         RowBox[{"NsupF", "[", 
+          RowBox[{"p2", ",", "p3", ",", "p4", ",", "p5"}], "]"}]}], "]"}], 
+       ",", 
+       RowBox[{"Parallelization", "\[Rule]", "True"}], ",", 
+       RowBox[{"RuntimeAttributes", "\[Rule]", 
+        RowBox[{"{", "Listable", "}"}]}], ",", 
+       RowBox[{"CompilationOptions", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<ExpressionOptimization\>\"", "\[Rule]", "True"}], ",", 
+          RowBox[{"\"\<InlineExternalDefinitions\>\"", "\[Rule]", "True"}], 
+          ",", 
+          RowBox[{"\"\<InlineCompiledFunctions\>\"", "\[Rule]", "True"}]}], 
+         "}"}]}], ",", 
+       RowBox[{"RuntimeOptions", "\[Rule]", "\"\<Speed\>\""}]}], "]"}]}], 
+    ";"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"-", 
+        RowBox[{"floR", ":", " ", 
+         RowBox[{"Calculates", " ", "flow", " ", "on", " ", "ramps"}]}]}]}], 
+      ";", " ", 
+      RowBox[{"Input", ":", "p1"}]}], ",", " ", 
+     RowBox[{
+      RowBox[{
+      "p2", " ", "and", " ", "p3", " ", "are", " ", "matrices", " ", "of", 
+       " ", "size", " ", "n"}], "-", 
+      RowBox[{"2", " ", "X", " ", "p"}], "-", "1"}], ",", " ", 
+     RowBox[{"ouput", ":", " ", 
+      RowBox[{
+       RowBox[{"matrix", " ", "of", " ", "size", " ", "n"}], "-", 
+       RowBox[{"2", " ", "X", " ", "p"}], "-", 
+       RowBox[{"1", "--"}], "-"}]}]}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"floR", "=", 
+     RowBox[{"Compile", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"p1", ",", "_Real", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p2", ",", "_Real", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p3", ",", "_Real", ",", "0"}], "}"}]}], "}"}], ",", 
+       RowBox[{"Min", "[", 
+        RowBox[{
+         RowBox[{"demR", "[", "p1", "]"}], ",", 
+         RowBox[{"NsupR", "[", 
+          RowBox[{"p2", ",", "p3"}], "]"}]}], "]"}], ",", 
+       RowBox[{"Parallelization", "\[Rule]", "True"}], ",", 
+       RowBox[{"RuntimeAttributes", "\[Rule]", 
+        RowBox[{"{", "Listable", "}"}]}], ",", 
+       RowBox[{"CompilationOptions", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<ExpressionOptimization\>\"", "\[Rule]", "True"}], ",", 
+          RowBox[{"\"\<InlineExternalDefinitions\>\"", "\[Rule]", "True"}]}], 
+         "}"}]}], ",", 
+       RowBox[{"RuntimeOptions", "\[Rule]", "\"\<Speed\>\""}]}], "]"}]}], 
+    ";"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"-", 
+        RowBox[{"gamma", ":", " ", 
+         RowBox[{
+         "Calculates", " ", "merge", " ", "ratio", " ", "for", " ", 
+          "freeway"}]}]}]}], ";", " ", 
+      RowBox[{"Input", ":", 
+       RowBox[{
+        RowBox[{
+        "p1", " ", "and", " ", "p2", " ", "are", " ", "vectors", " ", "of", 
+         " ", "size", " ", "n"}], "-", "2"}]}]}], ",", " ", 
+     RowBox[{"ouput", ":", " ", 
+      RowBox[{
+       RowBox[{"vector", " ", "of", " ", "size", " ", "n"}], "-", 
+       RowBox[{"2", "--"}], "-"}]}]}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"gamma", "=", 
+     RowBox[{"Compile", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"p1", ",", "_Real", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p2", ",", "_Real", ",", "0"}], "}"}]}], "}"}], ",", 
+       RowBox[{"Min", "[", 
+        RowBox[{"1", ",", 
+         RowBox[{"Divide", "[", 
+          RowBox[{
+           RowBox[{"supF", "[", "p2", "]"}], ",", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"demF", "[", 
+              RowBox[{"p1", ",", "0."}], "]"}], "+", "0.001"}], ")"}]}], 
+          "]"}]}], "]"}], ",", 
+       RowBox[{"Parallelization", "\[Rule]", "True"}], ",", 
+       RowBox[{"RuntimeAttributes", "\[Rule]", 
+        RowBox[{"{", "Listable", "}"}]}], ",", 
+       RowBox[{"CompilationOptions", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<ExpressionOptimization\>\"", "\[Rule]", "True"}], ",", 
+          RowBox[{"\"\<InlineExternalDefinitions\>\"", "\[Rule]", "True"}], 
+          ",", 
+          RowBox[{"\"\<InlineCompiledFunctions\>\"", "\[Rule]", "True"}]}], 
+         "}"}]}], ",", 
+       RowBox[{"RuntimeOptions", "\[Rule]", "\"\<Speed\>\""}]}], "]"}]}], 
+    ";"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"-", 
+        RowBox[{"updateF", ":", " ", 
+         RowBox[{
+         "Updates", " ", "freeway", " ", "density", " ", "for", " ", "next", 
+          " ", "timestep"}]}]}]}], ";", " ", 
+      RowBox[{"Input", ":", 
+       RowBox[{
+       "p1", " ", "and", " ", "p2", " ", "are", " ", "vectors", " ", "of", 
+        " ", "size", " ", "n"}]}]}], ",", " ", 
+     RowBox[{"ouput", ":", " ", 
+      RowBox[{
+       RowBox[{"vector", " ", "of", " ", "size", " ", 
+        RowBox[{"n", "--"}]}], "-"}]}]}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"updateF", "=", 
+     RowBox[{"Compile", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"p1", ",", "_Real", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p2", ",", "_Real", ",", "0"}], "}"}]}], "}"}], ",", 
+       RowBox[{"Min", "[", 
+        RowBox[{
+         RowBox[{"L", " ", "Kj"}], ",", 
+         RowBox[{"p1", "+", "p2"}]}], "]"}], ",", 
+       RowBox[{"Parallelization", "\[Rule]", "True"}], ",", 
+       RowBox[{"RuntimeAttributes", "\[Rule]", 
+        RowBox[{"{", "Listable", "}"}]}], ",", 
+       RowBox[{"CompilationOptions", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<ExpressionOptimization\>\"", "\[Rule]", "True"}], ",", 
+          RowBox[{"\"\<InlineExternalDefinitions\>\"", "\[Rule]", "True"}]}], 
+         "}"}]}], ",", 
+       RowBox[{"RuntimeOptions", "\[Rule]", "\"\<Speed\>\""}]}], "]"}]}], 
+    ";"}], "\n", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"--", 
+       RowBox[{"-", 
+        RowBox[{"compiledMin", ":", " ", 
+         RowBox[{
+         "Determines", " ", "RM", " ", "for", " ", "ramps", " ", "as", " ", 
+          "a", " ", "minimum", " ", "of", " ", "p1", " ", "and", " ", 
+          "p2"}]}]}]}], ";", " ", 
+      RowBox[{"Input", ":", 
+       RowBox[{
+        RowBox[{
+        "p1", " ", "and", " ", "p2", " ", "are", " ", "vectors", " ", "of", 
+         " ", "size", " ", "n"}], "-", "2"}]}]}], ",", " ", 
+     RowBox[{"ouput", ":", " ", 
+      RowBox[{
+       RowBox[{"vector", " ", "of", " ", "size", " ", "n"}], "-", 
+       RowBox[{"2", "--"}], "-"}]}]}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"compiledMin", "=", 
+     RowBox[{"Compile", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"p1", ",", "_Real", ",", "1"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"p2", ",", "_Real", ",", "1"}], "}"}]}], "}"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          RowBox[{"p1", " ", "#"}], "+", 
+          RowBox[{"p2", " ", 
+           RowBox[{"Subtract", "[", 
+            RowBox[{"1", ",", "#"}], "]"}]}]}], "&"}], "@", 
+        RowBox[{"UnitStep", "[", 
+         RowBox[{"Subtract", "[", 
+          RowBox[{"p2", ",", "p1"}], "]"}], "]"}]}], ",", 
+       RowBox[{"Parallelization", "\[Rule]", "True"}], ",", 
+       RowBox[{"RuntimeAttributes", "\[Rule]", 
+        RowBox[{"{", "Listable", "}"}]}], ",", 
+       RowBox[{"RuntimeOptions", "\[Rule]", "\"\<Speed\>\""}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"g", "[", 
+      RowBox[{"aa_", 
+       RowBox[{"(*", 
+        RowBox[{"?", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"ArrayQ", "[", 
+            RowBox[{"#", ",", "NumericQ"}], "]"}], "&"}], ")"}]}], "*)"}], 
+       ",", "a21_", 
+       RowBox[{"(*", 
+        RowBox[{"?", "NumericQ"}], "*)"}], ",", "a22_"}], 
+      RowBox[{"(*", 
+       RowBox[{"?", "NumericQ"}], "*)"}], "]"}], ":=", 
+     RowBox[{
+      RowBox[{"g", "[", 
+       RowBox[{"aa", ",", "a21", ",", "a22"}], "]"}], "=", 
+      RowBox[{"f", "[", 
+       RowBox[{"aa", ",", "a21", ",", "a22"}], "]"}]}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"f", "=", 
+     RowBox[{"With", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Kj", "=", "150."}], ",", 
+         RowBox[{"w", "=", "20."}], ",", 
+         RowBox[{"Vf", "=", "100."}], ",", 
+         RowBox[{"cap", "=", "2500."}], ",", 
+         RowBox[{"n", "=", "90"}], ",", 
+         RowBox[{"m", "=", "225"}], ",", 
+         RowBox[{"p", "=", "85"}], ",", 
+         RowBox[{"RML", "=", "45"}], ",", 
+         RowBox[{"L", "=", "3."}], ",", 
+         RowBox[{"delta", "=", "1."}], ",", 
+         RowBox[{"dt", "=", 
+          RowBox[{"4.", "/", "3600."}]}], ",", 
+         RowBox[{"dx", "=", 
+          RowBox[{"1.", "/", "9."}]}], ",", 
+         RowBox[{"Ssteps", "=", "10"}]}], "}"}], ",", 
+       RowBox[{"Compile", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"aa", ",", "_Integer", ",", "1"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"a21", ",", "_Real"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"a22", ",", "_Real"}], "}"}]}], "}"}], ",", 
+         RowBox[{"Module", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"a", "=", "a21"}], ",", 
+             RowBox[{"b", "=", "a22"}], ",", 
+             RowBox[{"k0", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{"0.", ",", 
+                RowBox[{"{", "n", "}"}]}], "]"}]}], ",", 
+             RowBox[{"kr", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{"0.", ",", 
+                RowBox[{"{", 
+                 RowBox[{"n", "-", "2"}], "}"}], ",", 
+                RowBox[{"{", "p", "}"}]}], "]"}]}], ",", 
+             RowBox[{"Fk", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{"0.", ",", 
+                RowBox[{"{", "5", "}"}], ",", 
+                RowBox[{"{", "n", "}"}]}], "]"}]}], ",", 
+             RowBox[{"Rk", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{"0.", ",", 
+                RowBox[{"{", "4", "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"n", "-", "2"}], "}"}], ",", 
+                RowBox[{"{", "p", "}"}]}], "]"}]}], ",", 
+             RowBox[{"Fq", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{"0.", ",", 
+                RowBox[{"{", "4", "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"n", "-", "1"}], "}"}]}], "]"}]}], ",", 
+             RowBox[{"Fin", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{"0.", ",", 
+                RowBox[{"{", "4", "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"n", "-", "2"}], "}"}]}], "]"}]}], ",", 
+             RowBox[{"Rq", "=", 
+              RowBox[{"Table", "[", 
+               RowBox[{"0.", ",", 
+                RowBox[{"{", "4", "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"n", "-", "2"}], "}"}], ",", 
+                RowBox[{"{", "p", "}"}]}], "]"}]}], ",", 
+             RowBox[{"Shutoff", "=", "False"}], ",", 
+             RowBox[{"j", "=", "1"}], ",", "fi", ",", "qin", ",", "qr", ",", 
+             "qf", ",", "qsum", ",", 
+             RowBox[{"TT", "=", "0."}], ",", 
+             RowBox[{"FTT", "=", "0."}], ",", 
+             RowBox[{"RTT", "=", "0."}], ",", 
+             RowBox[{"Tsteps", "=", 
+              RowBox[{"Quotient", "[", 
+               RowBox[{
+                RowBox[{"Length", "[", "aa", "]"}], ",", "Ssteps"}], "]"}]}], 
+             ",", "RM", ",", "RMori"}], "}"}], ",", 
+           RowBox[{
+            RowBox[{"RM", "=", 
+             RowBox[{"Table", "[", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"aa", "[", 
+                 RowBox[{"[", 
+                  RowBox[{
+                   RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{"jj", "-", "1"}], ")"}], "*", "Ssteps"}], "+", 
+                   RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Floor", "[", 
+                    RowBox[{"ii", " ", "dx"}], "]"}], "<", "1"}], ",", "1", 
+                    ",", 
+                    RowBox[{"Ceiling", "[", 
+                    RowBox[{"ii", " ", "dx"}], "]"}]}], "]"}]}], "]"}], "]"}],
+                 " ", "300."}], ",", 
+               RowBox[{"{", 
+                RowBox[{"jj", ",", "Tsteps"}], "}"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"ii", ",", "2", ",", 
+                 RowBox[{"n", "-", "1"}]}], "}"}]}], "]"}]}], ";", 
+            RowBox[{"RMori", "=", 
+             RowBox[{"RM", "[", 
+              RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"kr", "=", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"ReplacePart", "[", 
+                RowBox[{"#", ",", 
+                 RowBox[{"(", 
+                  RowBox[{"a", " ", 
+                   RowBox[{"delta", "/", "Vf"}]}], ")"}], ",", "1"}], "]"}], 
+               "&"}], "/@", "kr"}]}], ";", "\[IndentingNewLine]", 
+            RowBox[{"RTT", "=", 
+             RowBox[{"TT", "=", 
+              RowBox[{
+               RowBox[{"Total", "@", 
+                RowBox[{"Total", "@", "kr"}]}], " ", "dx"}]}]}], ";", 
+            RowBox[{"AppendTo", "[", 
+             RowBox[{"Rk", ",", "kr"}], "]"}], ";", "\[IndentingNewLine]", 
+            RowBox[{"While", "[", 
+             RowBox[{
+              RowBox[{"TT", ">", "0."}], ",", 
+              RowBox[{
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"j", ">", "0"}], "&&", 
+                  RowBox[{
+                   RowBox[{"Mod", "[", 
+                    RowBox[{"j", ",", "100"}], "]"}], "\[Equal]", "0"}]}], 
+                 ",", 
+                 RowBox[{"RMori", "=", 
+                  RowBox[{"RM", "[", 
+                   RowBox[{"[", 
+                    RowBox[{"Min", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Quotient", "[", 
+                    RowBox[{"j", ",", "100"}], "]"}], "+", "1"}], ",", 
+                    "Tsteps"}], "]"}], "]"}], "]"}]}]}], "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"fi", "=", 
+                RowBox[{
+                 RowBox[{"demR", "[", 
+                  RowBox[{"Last", "/@", "kr"}], "]"}], " ", 
+                 RowBox[{"gamma", "[", 
+                  RowBox[{
+                   RowBox[{"Take", "[", 
+                    RowBox[{"k0", ",", 
+                    RowBox[{"{", 
+                    RowBox[{"2", ",", 
+                    RowBox[{"-", "2"}]}], "}"}]}], "]"}], ",", 
+                   RowBox[{"Take", "[", 
+                    RowBox[{"k0", ",", 
+                    RowBox[{"{", 
+                    RowBox[{"3", ",", 
+                    RowBox[{"-", "1"}]}], "}"}]}], "]"}]}], "]"}]}]}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"qf", "=", 
+                RowBox[{
+                 RowBox[{"Fq", "[", 
+                  RowBox[{"[", 
+                   RowBox[{
+                    RowBox[{"Mod", "[", 
+                    RowBox[{"j", ",", "4"}], "]"}], "+", "1"}], "]"}], "]"}], 
+                 "=", 
+                 RowBox[{"floF", "[", 
+                  RowBox[{
+                   RowBox[{"Most", "@", "k0"}], ",", 
+                   RowBox[{"Rest", "@", 
+                    RowBox[{"(", 
+                    RowBox[{"Fk", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], ")"}]}], ",", 
+                   RowBox[{"Total", "@", "Fq"}], ",", 
+                   RowBox[{"Join", "[", 
+                    RowBox[{
+                    RowBox[{"Total", "@", "Fin"}], ",", 
+                    RowBox[{"{", "0.", "}"}]}], "]"}], ",", 
+                   RowBox[{"Join", "[", 
+                    RowBox[{
+                    RowBox[{"fi", " ", "dx"}], ",", 
+                    RowBox[{"{", "0.", "}"}]}], "]"}]}], "]"}]}]}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"qin", "=", 
+                RowBox[{
+                 RowBox[{"Fin", "[", 
+                  RowBox[{"[", 
+                   RowBox[{
+                    RowBox[{"Mod", "[", 
+                    RowBox[{"j", ",", "4"}], "]"}], "+", "1"}], "]"}], "]"}], 
+                 "=", 
+                 RowBox[{
+                  RowBox[{"Subtract", "[", 
+                   RowBox[{"fi", ",", 
+                    RowBox[{"b", " ", 
+                    RowBox[{"Most", "@", "qf"}]}]}], "]"}], " ", "dx"}]}]}], 
+               ";", "\[IndentingNewLine]", 
+               RowBox[{"Fk", "=", 
+                RowBox[{"RotateLeft", "[", "Fk", "]"}]}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"k0", "=", 
+                RowBox[{
+                 RowBox[{"Fk", "[", 
+                  RowBox[{"[", 
+                   RowBox[{"-", "1"}], "]"}], "]"}], "=", 
+                 RowBox[{"updateF", "[", 
+                  RowBox[{
+                   RowBox[{"Join", "[", 
+                    RowBox[{
+                    RowBox[{"{", "0.", "}"}], ",", 
+                    RowBox[{"Divide", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Subtract", "[", 
+                    RowBox[{
+                    RowBox[{"Most", "@", "qf"}], ",", 
+                    RowBox[{"Rest", "@", "qf"}]}], "]"}], "+", "qin"}], ",", 
+                    "Vf"}], "]"}], ",", 
+                    RowBox[{"{", "0.", "}"}]}], "]"}], ",", "k0"}], "]"}]}]}],
+                ";", "\[IndentingNewLine]", 
+               RowBox[{"qsum", "=", 
+                RowBox[{"Total", "@", "Rq"}]}], ";", "\[IndentingNewLine]", 
+               RowBox[{"qr", "=", 
+                RowBox[{"Transpose", "[", 
+                 RowBox[{"Join", "[", 
+                  RowBox[{
+                   RowBox[{"Transpose", "[", 
+                    RowBox[{"floR", "[", 
+                    RowBox[{
+                    RowBox[{"Most", "/@", "kr"}], ",", 
+                    RowBox[{"Rest", "/@", 
+                    RowBox[{"Rk", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}]}], ",", 
+                    RowBox[{"Most", "/@", "qsum"}]}], "]"}], "]"}], ",", 
+                   RowBox[{"{", "fi", "}"}]}], "]"}], "]"}]}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{
+                RowBox[{"qr", "[", 
+                 RowBox[{"[", 
+                  RowBox[{"All", ",", "RML"}], "]"}], "]"}], "=", 
+                RowBox[{"compiledMin", "[", 
+                 RowBox[{"RMori", ",", 
+                  RowBox[{"floR", "[", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"kr", "\[Transpose]"}], "[", 
+                    RowBox[{"[", "RML", "]"}], "]"}], ",", 
+                    RowBox[{
+                    RowBox[{"Rk", "[", 
+                    RowBox[{"[", "1", "]"}], "]"}], "[", 
+                    RowBox[{"[", 
+                    RowBox[{"All", ",", 
+                    RowBox[{"RML", "+", "1"}]}], "]"}], "]"}], ",", 
+                    RowBox[{
+                    RowBox[{"qsum", "\[Transpose]"}], "[", 
+                    RowBox[{"[", "RML", "]"}], "]"}]}], "]"}]}], "]"}]}], ";",
+                "\[IndentingNewLine]", 
+               RowBox[{
+                RowBox[{"Rq", "[", 
+                 RowBox[{"[", 
+                  RowBox[{
+                   RowBox[{"Mod", "[", 
+                    RowBox[{"j", ",", "4"}], "]"}], "+", "1"}], "]"}], "]"}], 
+                "=", "qr"}], ";", "\[IndentingNewLine]", 
+               RowBox[{"Rk", "=", 
+                RowBox[{"RotateLeft", "[", "Rk", "]"}]}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{
+                RowBox[{"Rk", "[", 
+                 RowBox[{"[", 
+                  RowBox[{"-", "1"}], "]"}], "]"}], "=", 
+                RowBox[{"kr", "=", 
+                 RowBox[{"(", 
+                  RowBox[{
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Join", "[", 
+                    RowBox[{
+                    RowBox[{"{", "0.", "}"}], ",", "#"}], "]"}], "&"}], "/@", 
+                    RowBox[{"(", 
+                    RowBox[{"Divide", "[", 
+                    RowBox[{
+                    RowBox[{"Subtract", "[", 
+                    RowBox[{
+                    RowBox[{"Most", "/@", "qr"}], ",", 
+                    RowBox[{"Rest", "/@", "qr"}]}], "]"}], ",", "Vf"}], "]"}],
+                     ")"}]}], ")"}], "+", "kr"}], ")"}]}]}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"(", 
+                   RowBox[{"Shutoff", "\[Equal]", "False"}], ")"}], "&&", 
+                  RowBox[{"j", ">", "m"}]}], ",", 
+                 RowBox[{
+                  RowBox[{"Shutoff", "=", "True"}], ";", 
+                  RowBox[{"kr", "=", 
+                   RowBox[{
+                    RowBox[{
+                    RowBox[{"ReplacePart", "[", 
+                    RowBox[{"#", ",", "0.", ",", "1"}], "]"}], "&"}], "/@", 
+                    "kr"}]}]}]}], "]"}], ";", "\[IndentingNewLine]", 
+               RowBox[{"FTT", "+=", 
+                RowBox[{"Total", "@", "k0"}]}], ";", 
+               RowBox[{"RTT", "+=", 
+                RowBox[{
+                 RowBox[{"Total", "@", 
+                  RowBox[{"Total", "@", "kr"}]}], " ", "dx"}]}], ";", 
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{"j", ">", "m"}], ",", 
+                 RowBox[{"TT", "=", 
+                  RowBox[{"Total", "@", "k0"}]}]}], "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"Max", "[", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"#", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"RML", "+", "1"}], "]"}], "]"}], "&"}], "/@", 
+                    "kr"}], ")"}], "]"}], ">", 
+                  RowBox[{"Kj", "-", 
+                   RowBox[{"a", "/", "w"}]}]}], ",", 
+                 RowBox[{
+                  RowBox[{"RTT", "=", 
+                   RowBox[{"10", "^", "10"}]}], ";", 
+                  RowBox[{"Break", "[", "]"}]}]}], "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"If", "[", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"Max", "[", 
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"#", "[", 
+                    RowBox[{"[", "2", "]"}], "]"}], "&"}], "/@", "kr"}], 
+                    ")"}], "]"}], ">", 
+                  RowBox[{"Kj", "-", 
+                   RowBox[{"a", "/", "w"}]}]}], ",", 
+                 RowBox[{
+                  RowBox[{"RTT", "=", 
+                   RowBox[{"10", "^", "10"}]}], ";", 
+                  RowBox[{"Break", "[", "]"}]}]}], "]"}], ";", 
+               "\[IndentingNewLine]", 
+               RowBox[{"j", "++"}]}]}], "]"}], ";", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{"(", 
+              RowBox[{"RTT", "+", "FTT"}], ")"}], " ", "dt", " ", "dx"}]}]}], 
+          "]"}], ",", 
+         RowBox[{"CompilationOptions", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"\"\<ExpressionOptimization\>\"", "\[Rule]", "True"}], 
+            ",", 
+            RowBox[{
+            "\"\<InlineExternalDefinitions\>\"", "\[Rule]", "True"}]}], 
+           RowBox[{"(*", 
+            RowBox[{",", 
+             RowBox[{"\"\<InlineCompiledFunctions\>\"", "\[Rule]", "True"}]}],
+             "*)"}], "}"}]}], ",", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{"Parallelization", "\[Rule]", "True"}], ",", 
+           RowBox[{"RuntimeAttributes", "\[Rule]", 
+            RowBox[{"{", "Listable", "}"}]}], ","}], "*)"}], 
+         RowBox[{"RuntimeOptions", "\[Rule]", "\"\<Speed\>\""}]}], "]"}]}], 
+      "]"}]}], ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.615329005833189*^9, 3.6153291145803924`*^9}, {
+   3.615329151840691*^9, 3.615329256607195*^9}, {3.6153293062461233`*^9, 
+   3.615329416240285*^9}, {3.6153342333620586`*^9, 3.615334393823505*^9}, {
+   3.6153345044408875`*^9, 3.6153345102543554`*^9}, {3.615334993118679*^9, 
+   3.615335018136277*^9}, {3.615335552845834*^9, 3.6153356552537713`*^9}, {
+   3.6153356933270283`*^9, 3.6153356945848618`*^9}, {3.615336253325522*^9, 
+   3.6153362558291836`*^9}, {3.6153363372028837`*^9, 
+   3.6153363854478884`*^9}, {3.6153366871818075`*^9, 
+   3.6153367320835967`*^9}, {3.615336772699539*^9, 3.6153368075046296`*^9}, 
+   3.6153377295589*^9, 3.615338018137041*^9, {3.615338078287726*^9, 
+   3.6153381037186174`*^9}, {3.615338165704672*^9, 3.615338191956812*^9}, {
+   3.615338236735745*^9, 3.6153382371950502`*^9}, 3.615338667877761*^9, {
+   3.6153387323755484`*^9, 3.61533877482021*^9}, {3.6153392320189295`*^9, 
+   3.615339292733221*^9}, {3.615487605740778*^9, 3.6154876217894244`*^9}, {
+   3.6154876821194468`*^9, 3.6154876866144285`*^9}, {3.6154888524524975`*^9, 
+   3.6154888588997774`*^9}, {3.6154889517193527`*^9, 
+   3.6154889599488096`*^9}, {3.615488990599147*^9, 3.615488991041438*^9}, {
+   3.615489058756359*^9, 3.615489091204037*^9}, {3.6154891755329757`*^9, 
+   3.615489205580913*^9}, {3.6154892563495865`*^9, 3.615489268075367*^9}, {
+   3.615489357131445*^9, 3.6154893717539034`*^9}, {3.6154895003329983`*^9, 
+   3.6154895534662557`*^9}, {3.6154897640894194`*^9, 
+   3.6154897873772974`*^9}, {3.6154901531671877`*^9, 
+   3.6154901666351213`*^9}, {3.6154901993848515`*^9, 
+   3.6154903315106964`*^9}, {3.615490554382307*^9, 3.615490565925965*^9}, {
+   3.615510686665886*^9, 3.615510744411066*^9}, {3.615547628994301*^9, 
+   3.6155476290393333`*^9}, {3.615547670847681*^9, 3.6155476772863665`*^9}, {
+   3.615547782207609*^9, 3.6155477925004373`*^9}, {3.615547831867367*^9, 
+   3.615547852167706*^9}, {3.615547959482254*^9, 3.6155479691010275`*^9}, {
+   3.6155480053180094`*^9, 3.615548013012926*^9}, 3.6155538384657545`*^9, 
+   3.6155545188931403`*^9, 3.6155545597992783`*^9, {3.6155546147907586`*^9, 
+   3.615554635960803*^9}, {3.6155546678549614`*^9, 3.6155546726831627`*^9}, 
+   3.6155552511151247`*^9, {3.6155552961760178`*^9, 3.615555342144513*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"timeAvg", "=", 
+   RowBox[{"Function", "[", 
+    RowBox[{"func", ",", 
+     RowBox[{"Do", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"#", ">", "0.3"}], ",", 
+           RowBox[{"Return", "[", 
+            RowBox[{"#", "/", 
+             RowBox[{"5", "^", "i"}]}], "]"}]}], "]"}], "&"}], "@@", 
+        RowBox[{"AbsoluteTiming", "@", 
+         RowBox[{"Do", "[", 
+          RowBox[{"func", ",", 
+           RowBox[{"{", 
+            RowBox[{"5", "^", "i"}], "}"}]}], "]"}]}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "0", ",", "15"}], "}"}]}], "]"}], ",", 
+     "HoldFirst"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"f", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "5", ",", "5", ",", "5", ",", "5", ",", "5", ",", "5", ",", "5", ",", 
+      "5", ",", "5", ",", "5"}], "}"}], ",", "1800", ",", "0.05"}], "]"}], "//",
+   "timeAvg"}]}], "Input",
+ CellChangeTimes->{{3.615329005833189*^9, 3.6153291145803924`*^9}, {
+   3.615329151840691*^9, 3.615329256607195*^9}, {3.6153293062461233`*^9, 
+   3.615329416240285*^9}, {3.6153342333620586`*^9, 3.615334393823505*^9}, {
+   3.6153345044408875`*^9, 3.6153345102543554`*^9}, {3.615334993118679*^9, 
+   3.615335018136277*^9}, {3.615335552845834*^9, 3.6153356552537713`*^9}, {
+   3.6153356933270283`*^9, 3.6153356945848618`*^9}, {3.615336253325522*^9, 
+   3.6153362558291836`*^9}, {3.6153363372028837`*^9, 
+   3.6153363854478884`*^9}, {3.6153366871818075`*^9, 
+   3.6153367320835967`*^9}, {3.615336772699539*^9, 3.6153368075046296`*^9}, 
+   3.6153377295589*^9, {3.615338018137041*^9, 3.615338041024006*^9}, {
+   3.6154895811995*^9, 3.615489583475009*^9}, {3.615551326948196*^9, 
+   3.6155513308317738`*^9}}],
+
+Cell[BoxData["0.86457150000000004830269517697161063552`5.95740082849676"], \
+"Output",
+ CellChangeTimes->{
+  3.6155478708008347`*^9, 3.6155480323042545`*^9, 3.615551344922119*^9, 
+   3.6155538805836945`*^9, {3.6155545412129483`*^9, 3.615554573156139*^9}, {
+   3.615554649843012*^9, 3.6155546579353795`*^9}, {3.6155551961486597`*^9, 
+   3.615555205807068*^9}, {3.615555263529359*^9, 3.6155552699756355`*^9}, {
+   3.6155553313043213`*^9, 3.615555363352581*^9}}]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"ix", "=", "0"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"MRmax", "=", 
+   RowBox[{"Ceiling", "[", 
+    RowBox[{"aa", "/", "300"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"sol", ",", 
+      RowBox[{"{", "points", "}"}]}], "}"}], "=", 
+    RowBox[{"Reap", "[", 
+     RowBox[{"CheckAbort", "[", 
+      RowBox[{
+       RowBox[{"NMinimize", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"Hold", "[", 
+            RowBox[{"t", "=", 
+             RowBox[{"g", "[", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"x", "[", "1", "]"}], ",", 
+                 RowBox[{"x", "[", "2", "]"}], ",", 
+                 RowBox[{"x", "[", "3", "]"}], ",", 
+                 RowBox[{"x", "[", "4", "]"}], ",", 
+                 RowBox[{"x", "[", "5", "]"}], ",", 
+                 RowBox[{"x", "[", "6", "]"}], ",", 
+                 RowBox[{"x", "[", "7", "]"}], ",", 
+                 RowBox[{"x", "[", "8", "]"}], ",", 
+                 RowBox[{"x", "[", "9", "]"}], ",", 
+                 RowBox[{"x", "[", "10", "]"}]}], "}"}], ",", "aa", ",", 
+               "bb"}], "]"}]}], "]"}], ",", 
+           RowBox[{
+            RowBox[{"And", "@@", 
+             RowBox[{"Thread", "@", 
+              RowBox[{"LessEqual", "[", 
+               RowBox[{"1", ",", 
+                RowBox[{"{", 
+                 RowBox[{
+                  RowBox[{"x", "[", "1", "]"}], ",", 
+                  RowBox[{"x", "[", "2", "]"}], ",", 
+                  RowBox[{"x", "[", "3", "]"}], ",", 
+                  RowBox[{"x", "[", "4", "]"}], ",", 
+                  RowBox[{"x", "[", "5", "]"}], ",", 
+                  RowBox[{"x", "[", "6", "]"}], ",", 
+                  RowBox[{"x", "[", "7", "]"}], ",", 
+                  RowBox[{"x", "[", "8", "]"}], ",", 
+                  RowBox[{"x", "[", "9", "]"}], ",", 
+                  RowBox[{"x", "[", "10", "]"}]}], "}"}], ",", "MRmax"}], 
+               "]"}]}]}], "&&", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"x", "[", "1", "]"}], ",", 
+               RowBox[{"x", "[", "2", "]"}], ",", 
+               RowBox[{"x", "[", "3", "]"}], ",", 
+               RowBox[{"x", "[", "4", "]"}], ",", 
+               RowBox[{"x", "[", "5", "]"}], ",", 
+               RowBox[{"x", "[", "6", "]"}], ",", 
+               RowBox[{"x", "[", "7", "]"}], ",", 
+               RowBox[{"x", "[", "8", "]"}], ",", 
+               RowBox[{"x", "[", "9", "]"}], ",", 
+               RowBox[{"x", "[", "10", "]"}]}], "}"}], "\[Element]", 
+             "Integers"}]}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"x", "[", "1", "]"}], ",", 
+           RowBox[{"x", "[", "2", "]"}], ",", 
+           RowBox[{"x", "[", "3", "]"}], ",", 
+           RowBox[{"x", "[", "4", "]"}], ",", 
+           RowBox[{"x", "[", "5", "]"}], ",", 
+           RowBox[{"x", "[", "6", "]"}], ",", 
+           RowBox[{"x", "[", "7", "]"}], ",", 
+           RowBox[{"x", "[", "8", "]"}], ",", 
+           RowBox[{"x", "[", "9", "]"}], ",", 
+           RowBox[{"x", "[", "10", "]"}]}], "}"}], ",", 
+         RowBox[{"WorkingPrecision", "\[Rule]", "4"}], ",", 
+         RowBox[{"MaxIterations", "\[Rule]", "30000"}], ",", 
+         RowBox[{"Method", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"\"\<DifferentialEvolution\>\"", ",", 
+            RowBox[{"\"\<CrossProbability\>\"", "\[Rule]", "0.8"}], ",", 
+            RowBox[{"\"\<SearchPoints\>\"", "\[Rule]", "100"}], ",", 
+            RowBox[{"\"\<ScalingFactor\>\"", "\[Rule]", "0.4"}], ",", 
+            RowBox[{"\"\<PostProcess\>\"", "\[Rule]", 
+             RowBox[{"{", 
+              RowBox[{"FindMinimum", ",", 
+               RowBox[{"Method", "\[Rule]", 
+                RowBox[{"{", 
+                 RowBox[{
+                 "\"\<QuasiNewton\>\"", ",", "\"\<InteriorPoint\>\"", ",", 
+                  "\"\<KKT\>\""}], "}"}]}]}], "}"}]}], ",", 
+            RowBox[{"\"\<RandomSeed\>\"", "\[Rule]", "ii"}]}], "}"}]}], ",", 
+         RowBox[{"EvaluationMonitor", "\[RuleDelayed]", 
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"it", "=", 
+             RowBox[{"ix", "++"}]}], ";", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"Mod", "[", 
+                RowBox[{"it", ",", "5000"}], "]"}], "\[Equal]", "0"}], ",", 
+              RowBox[{"Print", "[", "it", "]"}]}], "]"}], ";", 
+            RowBox[{"Sow", "[", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"x", "[", "1", "]"}], ",", 
+                 RowBox[{"x", "[", "2", "]"}], ",", 
+                 RowBox[{"x", "[", "3", "]"}], ",", 
+                 RowBox[{"x", "[", "4", "]"}], ",", 
+                 RowBox[{"x", "[", "5", "]"}], ",", 
+                 RowBox[{"x", "[", "6", "]"}], ",", 
+                 RowBox[{"x", "[", "7", "]"}], ",", 
+                 RowBox[{"x", "[", "8", "]"}], ",", 
+                 RowBox[{"x", "[", "9", "]"}], ",", 
+                 RowBox[{"x", "[", "10", "]"}]}], "}"}], ",", 
+               RowBox[{"{", "t", "}"}]}], "}"}], "]"}]}], ")"}]}]}], "]"}], 
+       ",", "ignored"}], "]"}], "]"}]}], ";"}], "\[IndentingNewLine]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Export", "[", 
+    RowBox[{
+     RowBox[{"\"\<./TI\>\"", "<>", "\"\<_\>\"", "<>", 
+      RowBox[{"ToString", "[", "aa", "]"}], "<>", "\"\<_\>\"", "<>", 
+      RowBox[{"ToString", "[", "bb", "]"}], "<>", "\"\<_\>\"", "<>", 
+      RowBox[{"ToString", "[", "ii", "]"}], "<>", "\"\<.csv\>\""}], ",", 
+     RowBox[{"Join", "[", 
+      RowBox[{
+       RowBox[{"DeleteDuplicates", "[", "points", "]"}], ",", "sol"}], 
+      "]"}]}], "]"}], ";"}], "\[IndentingNewLine]"}], "\n"}], "Input",
+ CellChangeTimes->{{3.615329005833189*^9, 3.6153291145803924`*^9}, {
+   3.615329151840691*^9, 3.615329256607195*^9}, {3.6153293062461233`*^9, 
+   3.615329416240285*^9}, {3.6153342333620586`*^9, 3.615334393823505*^9}, {
+   3.6153345044408875`*^9, 3.6153345102543554`*^9}, {3.615334993118679*^9, 
+   3.615335018136277*^9}, {3.615335552845834*^9, 3.6153356552537713`*^9}, {
+   3.6153356933270283`*^9, 3.6153356945848618`*^9}, {3.615336253325522*^9, 
+   3.6153362558291836`*^9}, {3.6153363372028837`*^9, 
+   3.6153363854478884`*^9}, {3.6153366871818075`*^9, 
+   3.6153367320835967`*^9}, {3.615336772699539*^9, 3.6153368075046296`*^9}, 
+   3.6153377295589*^9, {3.615338018137041*^9, 3.6153380235156136`*^9}, {
+   3.615490420412434*^9, 3.6154904273830576`*^9}}]
+},
+WindowSize->{1350, 685},
+WindowMargins->{{-8, Automatic}, {Automatic, 0}},
+FrontEndVersion->"10.0 for Microsoft Windows (64-bit) (July 1, 2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 37943, 958, 1312, "Input"],
+Cell[CellGroupData[{
+Cell[38526, 982, 1787, 42, 52, "Input"],
+Cell[40316, 1026, 459, 7, 31, "Output"]
+}, Open  ]],
+Cell[40790, 1036, 6665, 148, 332, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)
